@@ -1,0 +1,19 @@
+[workspace]
+members = [
+    "input-provider",
+    "prover",
+    "program",
+    "script",
+]
+resolver = "2"
+
+[workspace.dependencies]
+alloy-sol-types = "0.7.7"
+prover = { path = "prover" }
+input-provider = { path = "input-provider" }
+
+[profile.release]
+codegen-units = 1
+lto = "fat"
+strip = "symbols"
+panic = "abort"
