@@ -1,12 +1,12 @@
 [package]
 version = "0.1.0"
-name = "fibonacci-program"
+name = "fuel-program"
 edition = "2021"
 
 [dependencies]
 alloy-sol-types = { workspace = true }
 sp1-zkvm = { git = "https://github.com/succinctlabs/sp1", branch = "dev" }
-prover = { path = "../prover" }
+prover = { workspace = true }
 
 [profile.release]
 codegen-units = 1

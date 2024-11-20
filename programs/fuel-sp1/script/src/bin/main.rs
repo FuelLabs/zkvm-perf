@@ -12,12 +12,9 @@
 
 use alloy_sol_types::SolType;
 use clap::Parser;
-use input_provider::start_node_with_transaction_and_produce_prover_input;
+use fuel_fixture::{start_node_with_transaction_and_produce_prover_input, Instruction};
 use prover::PublicValuesStruct;
-use sp1_sdk::{
-    ProverClient,
-    SP1Stdin,
-};
+use sp1_sdk::{ProverClient, SP1Stdin};
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
 pub const FIBONACCI_ELF: &[u8] =
@@ -42,9 +39,8 @@ async fn main() {
     // Setup the logger.
     sp1_sdk::utils::setup_logger();
 
-    let service = start_node_with_transaction_and_produce_prover_input()
-        .await
-        .unwrap();
+    let service =
+        start_node_with_transaction_and_produce_prover_input(Instruction::ADD).await.unwrap();
 
     // Parse the command line arguments.
     let args = Args::parse();
@@ -82,10 +78,7 @@ async fn main() {
         let (pk, vk) = client.setup(FIBONACCI_ELF);
 
         // Generate the proof
-        let proof = client
-            .prove(&pk, stdin)
-            .run()
-            .expect("failed to generate proof");
+        let proof = client.prove(&pk, stdin).run().expect("failed to generate proof");
 
         println!("Successfully generated proof!");
 
