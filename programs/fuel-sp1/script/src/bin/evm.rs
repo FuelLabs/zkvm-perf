@@ -11,8 +11,8 @@
 //! ```
 
 use clap::{Parser, ValueEnum};
-use fuel_fixture::{start_node_with_transaction_and_produce_prover_input, Instruction};
-use prover::PublicValuesStruct;
+use fuel_zkvm_primitives_test_fixtures::{start_node_with_transaction_and_produce_prover_input, Instruction};
+use fuel_zkvm_primitives_prover::PublicValuesStruct;
 use serde::{Deserialize, Serialize};
 use sp1_sdk::{HashableKey, ProverClient, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey};
 use std::path::PathBuf;

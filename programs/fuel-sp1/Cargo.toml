@@ -7,9 +7,8 @@ resolver = "2"
 
 [workspace.dependencies]
 alloy-sol-types = "0.7.7"
-prover = { path = "../../../zkvm-primitives/prover" }
-input-provider = { path = "../../../zkvm-primitives/input-provider" }
-fuel-fixture = { path = "../../../zkvm-primitives/example", package = "example" }
+fuel-zkvm-primitives-prover = { path = "../../../zkvm-primitives/fuel-zkvm-primitives-prover" }
+fuel-zkvm-primitives-input-provider = { path = "../../../zkvm-primitives/fuel-zkvm-primitives-input-provider" }
 
 [profile.release]
 codegen-units = 1

@@ -12,8 +12,8 @@
 
 use alloy_sol_types::SolType;
 use clap::Parser;
-use fuel_fixture::{start_node_with_transaction_and_produce_prover_input, Instruction};
-use prover::PublicValuesStruct;
+use fuel_zkvm_primitives_test_fixtures::{start_node_with_transaction_and_produce_prover_input, Instruction};
+use fuel_zkvm_primitives_prover::PublicValuesStruct;
 use sp1_sdk::{ProverClient, SP1Stdin};
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.

@@ -20,9 +20,9 @@ clap = { version = "4.0", features = ["derive", "env"] }
 tracing = "0.1.40"
 hex = "0.4.3"
 alloy-sol-types = { workspace = true }
-input-provider = { workspace = true }
-prover = { workspace = true }
-fuel-fixture = { workspace = true }
+fuel-zkvm-primitives-input-provider = { workspace = true }
+fuel-zkvm-primitives-prover = { workspace = true }
+fuel-zkvm-primitives-test-fixtures = { path = "../../../../zkvm-primitives/fuel-zkvm-primitives-test-fixtures" }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 
 [build-dependencies]
