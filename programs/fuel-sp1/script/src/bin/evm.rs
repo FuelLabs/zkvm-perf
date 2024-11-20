@@ -10,25 +10,13 @@
 //! RUST_LOG=info cargo run --release --bin evm -- --system plonk
 //! ```
 
-use alloy_sol_types::SolType;
-use clap::{
-    Parser,
-    ValueEnum,
-};
-use input_provider::start_node_with_transaction_and_produce_prover_input;
+use clap::{Parser, ValueEnum};
+use fuel_fixture::{start_node_with_transaction_and_produce_prover_input, Instruction};
 use prover::PublicValuesStruct;
-use serde::{
-    Deserialize,
-    Serialize,
-};
-use sp1_sdk::{
-    HashableKey,
-    ProverClient,
-    SP1ProofWithPublicValues,
-    SP1Stdin,
-    SP1VerifyingKey,
-};
+use serde::{Deserialize, Serialize};
+use sp1_sdk::{HashableKey, ProverClient, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey};
 use std::path::PathBuf;
+use alloy_sol_types::SolType;
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
 pub const FIBONACCI_ELF: &[u8] =
@@ -67,9 +55,8 @@ async fn main() {
     // Setup the logger.
     sp1_sdk::utils::setup_logger();
 
-    let service = start_node_with_transaction_and_produce_prover_input()
-        .await
-        .unwrap();
+    let service =
+        start_node_with_transaction_and_produce_prover_input(Instruction::ADD).await.unwrap();
 
     // Parse the command line arguments.
     let args = EVMArgs::parse();
@@ -104,10 +91,8 @@ fn create_proof_fixture(
 ) {
     // Deserialize the public values.
     let bytes = proof.public_values.as_slice();
-    let PublicValuesStruct {
-        input_hash,
-        block_id,
-    } = PublicValuesStruct::abi_decode(bytes, false).unwrap();
+    let PublicValuesStruct { input_hash, block_id } =
+        PublicValuesStruct::abi_decode(bytes, false).unwrap();
 
     // Create the testing fixture so we can test things end-to-end.
     let fixture = SP1FibonacciProofFixture {
@@ -135,8 +120,7 @@ fn create_proof_fixture(
     println!("Proof Bytes: {}", fixture.proof);
 
     // Save the fixture to a file.
-    let fixture_path =
-        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../contracts/src/fixtures");
+    let fixture_path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../contracts/src/fixtures");
     std::fs::create_dir_all(&fixture_path).expect("failed to create fixture path");
     std::fs::write(
         fixture_path.join(format!("{:?}-fixture.json", system).to_lowercase()),

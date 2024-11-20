@@ -7,14 +7,10 @@
 // inside the zkVM.
 #![no_main]
 
-#[cfg(feature = "sp1")]
 sp1_zkvm::entrypoint!(main);
 
 use alloy_sol_types::SolType;
-use prover::{
-    prove,
-    PublicValuesStruct,
-};
+use prover::{prove, PublicValuesStruct};
 
 pub fn main() {
     // Read an input to the program.

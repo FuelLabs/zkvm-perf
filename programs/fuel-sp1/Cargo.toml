@@ -1,7 +1,5 @@
 [workspace]
 members = [
-    "input-provider",
-    "prover",
     "program",
     "script",
 ]
@@ -9,8 +7,9 @@ resolver = "2"
 
 [workspace.dependencies]
 alloy-sol-types = "0.7.7"
-prover = { path = "prover" }
-input-provider = { path = "input-provider" }
+prover = { path = "../../../zkvm-primitives/prover" }
+input-provider = { path = "../../../zkvm-primitives/input-provider" }
+fuel-fixture = { path = "../../../zkvm-primitives/example", package = "example" }
 
 [profile.release]
 codegen-units = 1
