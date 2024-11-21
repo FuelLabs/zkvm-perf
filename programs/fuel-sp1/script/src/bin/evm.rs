@@ -10,17 +10,16 @@
 //! RUST_LOG=info cargo run --release --bin evm -- --system plonk
 //! ```
 
+use alloy_sol_types::SolType;
 use clap::{Parser, ValueEnum};
-use fuel_zkvm_primitives_test_fixtures::{start_node_with_transaction_and_produce_prover_input, Instruction};
-use fuel_zkvm_primitives_prover::PublicValuesStruct;
+use fuel_zkvm_primitives_prover::{Input, PublicValuesStruct};
+use fuel_zkvm_primitives_test_fixtures::mainnet_blocks::{get_mainnet_block_input, MainnetBlocks};
 use serde::{Deserialize, Serialize};
 use sp1_sdk::{HashableKey, ProverClient, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey};
 use std::path::PathBuf;
-use alloy_sol_types::SolType;
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
-pub const FUEL_SP1_ELF: &[u8] =
-    include_bytes!("../../../elf/riscv32im-succinct-zkvm-elf");
+pub const FUEL_SP1_ELF: &[u8] = include_bytes!("../../../elf/riscv32im-succinct-zkvm-elf");
 
 /// The arguments for the EVM command.
 #[derive(Parser, Debug)]
@@ -55,8 +54,8 @@ async fn main() {
     // Setup the logger.
     sp1_sdk::utils::setup_logger();
 
-    let service =
-        start_node_with_transaction_and_produce_prover_input(Instruction::MULI).await.unwrap();
+    let raw_input = get_mainnet_block_input(MainnetBlocks::Block1522295);
+    let input: Input = bincode::deserialize(&raw_input).unwrap();
 
     // Parse the command line arguments.
     let args = EVMArgs::parse();
@@ -69,7 +68,7 @@ async fn main() {
 
     // Setup the inputs.
     let mut stdin = SP1Stdin::new();
-    stdin.write(&service.input);
+    stdin.write(&input);
 
     println!("Proof System: {:?}", args.system);
 
