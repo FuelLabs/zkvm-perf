@@ -40,7 +40,7 @@ async fn main() {
     sp1_sdk::utils::setup_logger();
 
     let service =
-        start_node_with_transaction_and_produce_prover_input(Instruction::ADD).await.unwrap();
+        start_node_with_transaction_and_produce_prover_input(Instruction::WQCM).await.unwrap();
 
     // Parse the command line arguments.
     let args = Args::parse();

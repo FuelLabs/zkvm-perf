@@ -19,8 +19,8 @@ use std::path::PathBuf;
 use alloy_sol_types::SolType;
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
-pub const FIBONACCI_ELF: &[u8] =
-    include_bytes!("../../../../../../prover-poc/sp1/elf/riscv32im-succinct-zkvm-elf");
+pub const FUEL_SP1_ELF: &[u8] =
+    include_bytes!("../../../elf/riscv32im-succinct-zkvm-elf");
 
 /// The arguments for the EVM command.
 #[derive(Parser, Debug)]
@@ -56,7 +56,7 @@ async fn main() {
     sp1_sdk::utils::setup_logger();
 
     let service =
-        start_node_with_transaction_and_produce_prover_input(Instruction::ADD).await.unwrap();
+        start_node_with_transaction_and_produce_prover_input(Instruction::MULI).await.unwrap();
 
     // Parse the command line arguments.
     let args = EVMArgs::parse();
@@ -65,7 +65,7 @@ async fn main() {
     let client = ProverClient::new();
 
     // Setup the program.
-    let (pk, vk) = client.setup(FIBONACCI_ELF);
+    let (pk, vk) = client.setup(FUEL_SP1_ELF);
 
     // Setup the inputs.
     let mut stdin = SP1Stdin::new();
