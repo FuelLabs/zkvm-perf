@@ -54,7 +54,7 @@ async fn main() {
     // Setup the logger.
     sp1_sdk::utils::setup_logger();
 
-    let raw_input = get_mainnet_block_input(MainnetBlocks::Block2243673);
+    let raw_input = get_mainnet_block_input(MainnetBlocks::Block6333890);
     let input: Input = bincode::deserialize(&raw_input).unwrap();
 
     // Parse the command line arguments.
