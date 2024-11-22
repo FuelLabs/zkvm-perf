@@ -13,7 +13,9 @@
 use alloy_sol_types::SolType;
 use clap::Parser;
 use fuel_zkvm_primitives_prover::{Input, PublicValuesStruct};
-use fuel_zkvm_primitives_test_fixtures::mainnet_blocks::{get_mainnet_block_input, MainnetBlocks};
+use fuel_zkvm_primitives_test_fixtures::opcodes::{
+    start_node_with_transaction_and_produce_prover_input, CryptoInstruction, Instruction,
+};
 use sp1_sdk::{ProverClient, SP1Stdin};
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
@@ -38,8 +40,11 @@ async fn main() {
     // Setup the logger.
     sp1_sdk::utils::setup_logger();
 
-    let raw_input = get_mainnet_block_input(MainnetBlocks::Block6333890);
-    let input: Input = bincode::deserialize(&raw_input).unwrap();
+    let service = start_node_with_transaction_and_produce_prover_input(Instruction::CRYPTO(
+        CryptoInstruction::ECK1,
+    ))
+    .await
+    .unwrap();
 
     // Parse the command line arguments.
     let args = Args::parse();
@@ -54,7 +59,7 @@ async fn main() {
 
     // Setup the inputs.
     let mut stdin = SP1Stdin::new();
-    stdin.write(&input);
+    stdin.write(&service.input);
 
     if args.execute {
         // Execute the program
@@ -64,7 +69,7 @@ async fn main() {
         // Read the output.
         let proof = PublicValuesStruct::abi_decode(output.as_slice(), true).unwrap();
 
-        let block_id: [u8; 32] = input.block.header().id().into();
+        let block_id: [u8; 32] = service.input.block.header().id().into();
         assert_eq!(proof.block_id.to_be_bytes(), block_id);
 
         println!("Proof block id: {:?}", proof.block_id);
