@@ -1628,15 +1628,16 @@ dependencies = [
 [[package]]
 name = "curve25519-dalek"
 version = "4.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "97fb8b7c4503de7d6ae7b42ab72a5a59857b4c937ec27a3d4539dba95b5ab2be"
+source = "git+https://github.com/FuelLabs/curve25519-dalek?rev=7d84b6b#7d84b6bcb6905969f7058cede39093a202110b66"
 dependencies = [
+ "anyhow",
  "cfg-if",
  "cpufeatures",
  "curve25519-dalek-derive",
  "digest 0.10.7",
  "fiat-crypto",
  "rustc_version 0.4.1",
+ "sp1-lib 3.3.0",
  "subtle",
  "zeroize",
 ]
@@ -1644,8 +1645,7 @@ dependencies = [
 [[package]]
 name = "curve25519-dalek-derive"
 version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f46882e17999c6cc590af592290432be3bce0428cb0d5f8b6715e4dc7b383eb3"
+source = "git+https://github.com/FuelLabs/curve25519-dalek?rev=7d84b6b#7d84b6bcb6905969f7058cede39093a202110b66"
 dependencies = [
  "proc-macro2",
  "quote",
