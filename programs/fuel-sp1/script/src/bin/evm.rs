@@ -3,18 +3,18 @@
 //!
 //! You can run this script using the following command:
 //! ```shell
-//! RUST_LOG=info cargo run --release --bin evm -- --system groth16
+//! RUST_LOG=info cargo run --release --bin evm -- add --system groth16
 //! ```
 //! or
 //! ```shell
-//! RUST_LOG=info cargo run --release --bin evm -- --system plonk
+//! RUST_LOG=info cargo run --release --bin evm -- add --system plonk
 //! ```
 
 use alloy_sol_types::SolType;
 use clap::{Parser, ValueEnum};
-use fuel_zkvm_primitives_prover::PublicValuesStruct;
-use fuel_zkvm_primitives_test_fixtures::opcodes::{
-    start_node_with_transaction_and_produce_prover_input, CryptoInstruction, Instruction,
+use fuel_zkvm_primitives_prover::{Input, PublicValuesStruct};
+use fuel_zkvm_primitives_test_fixtures::{
+    opcodes::start_node_with_transaction_and_produce_prover_input, Fixture,
 };
 use serde::{Deserialize, Serialize};
 use sp1_sdk::{HashableKey, ProverClient, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey};
@@ -27,8 +27,8 @@ pub const FUEL_SP1_ELF: &[u8] = include_bytes!("../../../elf/riscv32im-succinct-
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct EVMArgs {
-    #[clap(long, default_value = "20")]
-    n: u32,
+    #[arg(value_enum)]
+    fixture: Fixture,
     #[clap(long, value_enum, default_value = "groth16")]
     system: ProofSystem,
 }
@@ -56,12 +56,6 @@ async fn main() {
     // Setup the logger.
     sp1_sdk::utils::setup_logger();
 
-    let service = start_node_with_transaction_and_produce_prover_input(Instruction::CRYPTO(
-        CryptoInstruction::ECK1,
-    ))
-    .await
-    .unwrap();
-
     // Parse the command line arguments.
     let args = EVMArgs::parse();
 
@@ -73,7 +67,25 @@ async fn main() {
 
     // Setup the inputs.
     let mut stdin = SP1Stdin::new();
-    stdin.write(&service.input);
+
+    match args.fixture {
+        Fixture::MainnetBlock(block) => {
+            tracing::info!("Mainnet block: {:?}", block);
+            let raw_input =
+                fuel_zkvm_primitives_test_fixtures::mainnet_blocks::get_mainnet_block_input(block);
+            let input: Input = bincode::deserialize(&raw_input).unwrap();
+
+            stdin.write(&input);
+        }
+        Fixture::Opcode(opcode) => {
+            tracing::info!("Opcode args: {:?}", opcode);
+
+            let service =
+                start_node_with_transaction_and_produce_prover_input(opcode).await.unwrap();
+
+            stdin.write(&service.input);
+        }
+    }
 
     println!("Proof System: {:?}", args.system);
 
