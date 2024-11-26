@@ -69,10 +69,10 @@ async fn main() {
 
     assert_eq!(decoded_output.block_id.to_be_bytes(), block_id);
 
-    println!("Proof block id: {:?}", decoded_output.block_id);
-    println!("Proof input hash: {:?}", decoded_output.input_hash);
+    tracing::info!("Proof block id: {:?}", decoded_output.block_id);
+    tracing::info!("Proof input hash: {:?}", decoded_output.input_hash);
 
     prove_info.receipt.verify(FUEL_RISC0_PROVER_ID).expect("Proof verification failed.");
 
-    println!("Successfully verified proof!");
+    tracing::info!("Successfully verified proof!");
 }
