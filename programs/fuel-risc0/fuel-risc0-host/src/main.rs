@@ -46,7 +46,7 @@ async fn main() {
             let input: Input = bincode::deserialize(&raw_input).unwrap();
 
             block_id = input.block.header().id().into();
-            env.write(&input).expect("Failed to write input to environment");
+            env.write(&raw_input).expect("Failed to write input to environment");
         }
         Fixture::Opcode(instruction) => {
             let service =
