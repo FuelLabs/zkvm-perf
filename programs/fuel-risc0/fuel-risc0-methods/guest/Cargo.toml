@@ -1,0 +1,17 @@
+[package]
+version = "0.1.0"
+name = "fuel-risc0-prover"
+edition = "2021"
+
+[dependencies]
+alloy-sol-types = "0.7.7"
+risc0-zkvm = { version = "1.1.2", default-features = false, features = ["std", "heap-embedded-alloc"] }
+fuel-zkvm-primitives-prover = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "02b5bad" }
+
+[workspace]
+
+[profile.release]
+codegen-units = 1
+lto = "fat"
+strip = "symbols"
+panic = "abort"
