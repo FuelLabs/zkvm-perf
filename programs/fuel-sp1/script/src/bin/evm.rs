@@ -87,7 +87,7 @@ async fn main() {
         }
     }
 
-    println!("Proof System: {:?}", args.system);
+    tracing::info!("Proof System: {:?}", args.system);
 
     // Generate the proof based on the selected proof system.
     let proof = match args.system {
@@ -123,17 +123,17 @@ fn create_proof_fixture(
     // program on the given input.
     //
     // Note that the verification key stays the same regardless of the input.
-    println!("Verification Key: {}", fixture.vkey);
+    tracing::info!("Verification Key: {}", fixture.vkey);
 
     // The public values are the values which are publicly committed to by the zkVM.
     //
     // If you need to expose the inputs or outputs of your program, you should commit them in
     // the public values.
-    println!("Public Values: {}", fixture.public_values);
+    tracing::info!("Public Values: {}", fixture.public_values);
 
     // The proof proves to the verifier that the program was executed with some inputs that led to
     // the give public values.
-    println!("Proof Bytes: {}", fixture.proof);
+    tracing::info!("Proof Bytes: {}", fixture.proof);
 
     // Save the fixture to a file.
     let fixture_path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../contracts/src/fixtures");
