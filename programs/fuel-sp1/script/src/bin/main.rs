@@ -10,16 +10,10 @@
 //! RUST_LOG=info cargo run --release -- prove add
 //! ```
 
-use alloy_sol_types::SolType;
 use clap::{Parser, Subcommand};
-use fuel_zkvm_primitives_prover::{Input, PublicValuesStruct};
-use fuel_zkvm_primitives_test_fixtures::{
-    opcodes::start_node_with_transaction_and_produce_prover_input, Fixture,
-};
+use fuel_script::core::{execute_program, prove_and_verify_program};
+use fuel_zkvm_primitives_test_fixtures::Fixture;
 use sp1_sdk::{ProverClient, SP1Stdin};
-
-/// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
-pub const FUEL_SP1_ELF: &[u8] = include_bytes!("../../../elf/riscv32im-succinct-zkvm-elf");
 
 /// The arguments for the command.
 #[derive(Parser, Debug)]
@@ -54,86 +48,23 @@ async fn main() {
     let client = ProverClient::new();
 
     // Setup the inputs.
-    let mut stdin = SP1Stdin::new();
+    let stdin = SP1Stdin::new();
 
     match args.command {
         Command::Execute { fixture } => {
             tracing::info!("Executing the program.");
-
-            let block_id: [u8; 32];
-            match fixture {
-                Fixture::MainnetBlock(block) => {
-                    tracing::info!("Mainnet block: {:?}", block);
-                    let raw_input =
-                        fuel_zkvm_primitives_test_fixtures::mainnet_blocks::get_mainnet_block_input(
-                            block,
-                        );
-                    let input: Input = bincode::deserialize(&raw_input).unwrap();
-
-                    block_id = input.block.header().id().into();
-                    stdin.write(&input);
-                }
-                Fixture::Opcode(opcode) => {
-                    tracing::info!("Opcode args: {:?}", opcode);
-
-                    let service =
-                        start_node_with_transaction_and_produce_prover_input(opcode).await.unwrap();
-
-                    block_id = service.input.block.header().id().into();
-                    stdin.write(&service.input);
-                }
-            }
-
-            // Execute the program
-            let (output, report) = client.execute(FUEL_SP1_ELF, stdin).run().unwrap();
+            // Execute the program.
+            let report = execute_program(fixture, &client, stdin).await;
             tracing::info!("Program executed successfully.");
-
-            // Read the output.
-            let proof = PublicValuesStruct::abi_decode(output.as_slice(), true).unwrap();
-
-            assert_eq!(proof.block_id.to_be_bytes(), block_id);
-
-            tracing::info!("Proof block id: {:?}", proof.block_id);
-            tracing::info!("Proof input hash: {:?}", proof.input_hash);
 
             // Record the number of cycles executed.
             tracing::info!("Number of cycles: {}", report.total_instruction_count());
         }
         Command::Prove { fixture } => {
-            tracing::info!("Proving the program.");
-
-            match fixture {
-                Fixture::MainnetBlock(block) => {
-                    tracing::info!("Mainnet block: {:?}", block);
-                    let raw_input =
-                        fuel_zkvm_primitives_test_fixtures::mainnet_blocks::get_mainnet_block_input(
-                            block,
-                        );
-                    let input: Input = bincode::deserialize(&raw_input).unwrap();
-
-                    stdin.write(&input);
-                }
-                Fixture::Opcode(opcode) => {
-                    tracing::info!("Opcode args: {:?}", opcode);
-
-                    let service =
-                        start_node_with_transaction_and_produce_prover_input(opcode).await.unwrap();
-
-                    stdin.write(&service.input);
-                }
-            }
-
-            // Setup the program for proving.
-            let (pk, vk) = client.setup(FUEL_SP1_ELF);
-
-            // Generate the proof
-            let proof = client.prove(&pk, stdin).run().expect("failed to generate proof");
-
-            tracing::info!("Successfully generated proof!");
-
-            // Verify the proof.
-            client.verify(&proof, &vk).expect("failed to verify proof");
-            tracing::info!("Successfully verified proof!");
+            tracing::info!("Proving and verifying the program.");
+            // Generate and verify the proof.
+            prove_and_verify_program(fixture, &client, stdin).await;
+            tracing::info!("Successfully generated and verified proof!");
         }
     }
 }
