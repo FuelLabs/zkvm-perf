@@ -13,6 +13,7 @@
 //! for better visibility.
 use alloy_sol_types::SolType;
 use clap::Parser;
+use fuel_risc0_host::prove_program;
 use fuel_risc0_methods::{FUEL_RISC0_PROVER_ELF, FUEL_RISC0_PROVER_ID};
 use fuel_zkvm_primitives_prover::{Input, PublicValuesStruct};
 use fuel_zkvm_primitives_test_fixtures::{
@@ -37,42 +38,8 @@ async fn main() {
 
     let mut env = ExecutorEnv::builder();
 
-    let block_id: [u8; 32];
+    let output = prove_program(args.fixture, env).await;
 
-    match args.fixture {
-        Fixture::MainnetBlock(block) => {
-            let raw_input =
-                fuel_zkvm_primitives_test_fixtures::mainnet_blocks::get_mainnet_block_input(block);
-            let input: Input = bincode::deserialize(&raw_input).unwrap();
-
-            block_id = input.block.header().id().into();
-            env.write(&raw_input).expect("Failed to write input to environment");
-        }
-        Fixture::Opcode(instruction) => {
-            let service =
-                start_node_with_transaction_and_produce_prover_input(instruction).await.unwrap();
-
-            block_id = service.input.block.header().id().into();
-
-            let input: Vec<u8> =
-                bincode::serialize(&service.input).expect("Failed to serialize service input");
-
-            env.write(&input).expect("Failed to write input to environment");
-        }
-    }
-
-    let prover = default_prover();
-    let prove_info = prover.prove(env.build().unwrap(), FUEL_RISC0_PROVER_ELF).unwrap();
-    let output: Vec<u8> = prove_info.receipt.journal.decode().unwrap();
-
-    let decoded_output = PublicValuesStruct::abi_decode(&output, true).unwrap();
-
-    assert_eq!(decoded_output.block_id.to_be_bytes(), block_id);
-
-    tracing::info!("Proof block id: {:?}", decoded_output.block_id);
-    tracing::info!("Proof input hash: {:?}", decoded_output.input_hash);
-
-    prove_info.receipt.verify(FUEL_RISC0_PROVER_ID).expect("Proof verification failed.");
-
-    tracing::info!("Successfully verified proof!");
+    tracing::info!("Proof block id: {:?}", output.block_id);
+    tracing::info!("Proof input hash: {:?}", output.input_hash);
 }

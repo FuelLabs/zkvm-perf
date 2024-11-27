@@ -3656,6 +3656,7 @@ dependencies = [
  "alloy-sol-types",
  "bincode",
  "clap",
+ "csv",
  "fuel-risc0-methods",
  "fuel-zkvm-primitives-input-provider",
  "fuel-zkvm-primitives-prover",
