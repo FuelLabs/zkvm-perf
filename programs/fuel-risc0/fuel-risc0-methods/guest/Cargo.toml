@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 alloy-sol-types = "0.7.7"
 risc0-zkvm = { version = "1.1.2", default-features = false, features = ["std", "heap-embedded-alloc"] }
-fuel-zkvm-primitives-prover = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "6a19c4e" }
+fuel-zkvm-primitives-prover = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "b4f4195" }
 
 [workspace]
 
