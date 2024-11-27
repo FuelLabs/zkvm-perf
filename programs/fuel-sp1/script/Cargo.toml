@@ -16,12 +16,6 @@ path = "src/bin/evm.rs"
 name = "fuel_script"
 path = "src/lib/lib.rs"
 
-# default release profile
-[profile.test]
-codegen-units = 1
-lto = "fat"
-strip = "symbols"
-
 [dependencies]
 sp1-sdk = "3.3.0"
 serde_json = { version = "1.0", default-features = false, features = ["alloc"] }
