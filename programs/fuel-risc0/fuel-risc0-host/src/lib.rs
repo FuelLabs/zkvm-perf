@@ -74,18 +74,25 @@ mod tests {
     use serde::Serialize;
 
     #[derive(Serialize)]
-    #[serde(remote = "risc0_zkvm::SegmentInfo")]
     pub struct SegmentInfoCrateLocal {
         pub po2: u32,
         pub cycles: u32,
     }
 
+    impl From<SegmentInfo> for SegmentInfoCrateLocal {
+        fn from(segment: SegmentInfo) -> Self {
+            Self { po2: segment.po2, cycles: segment.cycles }
+        }
+    }
+
+    #[derive(Serialize)]
+    pub struct Segments(Vec<SegmentInfoCrateLocal>);
+
     #[derive(Serialize)]
     struct ExecutionReport {
         fixture: Fixture,
         cycle_count: u64,
-        #[serde(with = "SegmentInfoCrateLocal")]
-        segments: Vec<SegmentInfo>,
+        segments: Segments,
     }
 
     #[tokio::test]
@@ -103,7 +110,7 @@ mod tests {
             let report = ExecutionReport {
                 fixture: fixture.clone(),
                 cycle_count: executor_info.cycles(),
-                segments: executor_info.segments,
+                segments: executor_info.segments.into_iter().map(Into::into).collect(),
             };
 
             wtr.serialize(report).expect("Couldn't write report to CSV");
