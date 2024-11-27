@@ -68,7 +68,7 @@ pub async fn prove_program(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use csv::Writer;
+    use csv::{Writer, WriterBuilder};
     use fuel_zkvm_primitives_test_fixtures::all_fixtures;
     use risc0_zkvm::SegmentInfo;
     use serde::Serialize;
@@ -107,7 +107,7 @@ mod tests {
 
         let file_path =
             std::env::var("FUEL_RISC0_REPORT").unwrap_or("fuel_risc0_report.csv".to_string());
-        let mut wtr = Writer::from_path(file_path).expect("Couldn't create CSV writer");
+        let mut wtr = WriterBuilder::new().flexible(true).from_path(file_path).expect("Couldn't create CSV writer");
 
         for fixture in fixtures {
             let env = ExecutorEnvBuilder::default();
