@@ -97,7 +97,7 @@ mod tests {
         let mut wtr = Writer::from_path(file_path).expect("Couldn't create CSV writer");
 
         for fixture in fixtures {
-            let mut env = ExecutorEnvBuilder::default();
+            let env = ExecutorEnvBuilder::default();
             let executor_info = execute_program(fixture.clone(), env).await;
 
             let report = ExecutionReport {
