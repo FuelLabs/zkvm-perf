@@ -110,6 +110,8 @@ mod tests {
 
             // Flush the CSV writer to ensure the report is written to disk.
             wtr.flush().expect("Couldn't flush CSV writer");
+
+            tracing::info!("Executed fixture: {:?}", fixture);
         }
     }
 }

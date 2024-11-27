@@ -108,6 +108,8 @@ mod tests {
 
             // flush after each execution
             wtr.flush().expect("Couldn't flush CSV writer");
+
+            tracing::info!("Executed fixture: {:?}", fixture);
         }
     }
 }
