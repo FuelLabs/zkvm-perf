@@ -68,7 +68,7 @@ pub async fn prove_program(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use csv::{Writer, WriterBuilder};
+    use csv::WriterBuilder;
     use fuel_zkvm_primitives_test_fixtures::all_fixtures;
     use risc0_zkvm::SegmentInfo;
     use serde::Serialize;
