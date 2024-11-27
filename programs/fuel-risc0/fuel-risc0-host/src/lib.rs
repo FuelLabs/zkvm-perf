@@ -4,10 +4,9 @@ use fuel_zkvm_primitives_prover::{Input, PublicValuesStruct};
 use fuel_zkvm_primitives_test_fixtures::{
     opcodes::start_node_with_transaction_and_produce_prover_input, Fixture,
 };
-use risc0_zkvm::{ExecutorEnvBuilder, ProveInfo, SessionInfo};
-use std::str::EncodeUtf16;
+use risc0_zkvm::{ExecutorEnvBuilder, SessionInfo};
 
-pub async fn run_fixture(fixture: Fixture, env: &mut ExecutorEnvBuilder) -> [u8; 32] {
+pub async fn run_fixture(fixture: Fixture, env: &mut ExecutorEnvBuilder<'_>) -> [u8; 32] {
     let block_id: [u8; 32];
 
     match fixture {
@@ -36,7 +35,7 @@ pub async fn run_fixture(fixture: Fixture, env: &mut ExecutorEnvBuilder) -> [u8;
 }
 
 #[allow(unused)]
-pub async fn execute_program(fixture: Fixture, mut env: ExecutorEnvBuilder) -> SessionInfo {
+pub async fn execute_program(fixture: Fixture, mut env: ExecutorEnvBuilder<'_>) -> SessionInfo {
     let _ = run_fixture(fixture, &mut env).await;
 
     let executor = risc0_zkvm::default_executor();
@@ -45,7 +44,10 @@ pub async fn execute_program(fixture: Fixture, mut env: ExecutorEnvBuilder) -> S
     executor_info
 }
 
-pub async fn prove_program(fixture: Fixture, mut env: ExecutorEnvBuilder) -> PublicValuesStruct {
+pub async fn prove_program(
+    fixture: Fixture,
+    mut env: ExecutorEnvBuilder<'_>,
+) -> PublicValuesStruct {
     let block_id = run_fixture(fixture, &mut env).await;
 
     let prover = risc0_zkvm::default_prover();

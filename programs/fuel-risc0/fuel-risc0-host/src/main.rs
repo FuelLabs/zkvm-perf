@@ -11,15 +11,10 @@
 //!
 //! The `RISC0_DEV_MODE=1` flag enables development mode, and `RUST_LOG=info` configures logging
 //! for better visibility.
-use alloy_sol_types::SolType;
 use clap::Parser;
 use fuel_risc0_host::prove_program;
-use fuel_risc0_methods::{FUEL_RISC0_PROVER_ELF, FUEL_RISC0_PROVER_ID};
-use fuel_zkvm_primitives_prover::{Input, PublicValuesStruct};
-use fuel_zkvm_primitives_test_fixtures::{
-    opcodes::start_node_with_transaction_and_produce_prover_input, Fixture,
-};
-use risc0_zkvm::{default_prover, ExecutorEnv};
+use fuel_zkvm_primitives_test_fixtures::Fixture;
+use risc0_zkvm::ExecutorEnv;
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
@@ -36,7 +31,7 @@ async fn main() {
 
     let args = Args::parse();
 
-    let mut env = ExecutorEnv::builder();
+    let env = ExecutorEnv::builder();
 
     let output = prove_program(args.fixture, env).await;
 
