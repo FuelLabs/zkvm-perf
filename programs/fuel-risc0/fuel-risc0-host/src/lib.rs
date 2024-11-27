@@ -85,6 +85,12 @@ mod tests {
         }
     }
 
+    impl From<Vec<SegmentInfo>> for Segments {
+        fn from(value: Vec<SegmentInfo>) -> Self {
+            Self(value.into_iter().map(Into::into).collect())
+        }
+    }
+
     #[derive(Serialize)]
     pub struct Segments(Vec<SegmentInfoCrateLocal>);
 
@@ -110,7 +116,7 @@ mod tests {
             let report = ExecutionReport {
                 fixture: fixture.clone(),
                 cycle_count: executor_info.cycles(),
-                segments: executor_info.segments.into_iter().map(Into::into).collect(),
+                segments: executor_info.segments.into(),
             };
 
             wtr.serialize(report).expect("Couldn't write report to CSV");
