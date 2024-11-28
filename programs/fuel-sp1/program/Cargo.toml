@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 alloy-sol-types = { workspace = true }
-sp1-zkvm = { git = "https://github.com/succinctlabs/sp1", branch = "dev" }
+sp1-zkvm = { git = "https://github.com/succinctlabs/sp1", tag = "v4.0.0-rc.1" }
 fuel-zkvm-primitives-prover = { workspace = true }
 
 [profile.release]
