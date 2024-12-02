@@ -76,10 +76,19 @@ mod tests {
     use csv::Writer;
     use fuel_zkvm_primitives_test_fixtures::all_fixtures;
     use serde::Serialize;
+    use std::{fs::File, path::Path};
 
     #[derive(Serialize)]
     struct ExecutionReport {
         fixture: Fixture,
+        cycle_count: u64,
+        memory_address_count: u64,
+        syscall_count: u64,
+    }
+
+    #[derive(Serialize)]
+    struct MainnetExecutionReport {
+        block_number: u64,
         cycle_count: u64,
         memory_address_count: u64,
         syscall_count: u64,
@@ -120,5 +129,42 @@ mod tests {
         let fixture = skipped.first().unwrap();
         let stdin = SP1Stdin::new();
         let _ = execute_program(fixture.clone(), &ProverClient::new(), stdin).await;
+    }
+
+    #[tokio::test]
+    async fn run_batch_mainnet_blocks() {
+        // we have to fetch the mainnet blocks from ~/Downloads/src/fixtures/testnet_block/*.bin
+        let file_path = std::env::var("FUEL_SP1_REPORT")
+            .unwrap_or("fuel_sp1_report_mainnet_blocks.csv".to_string());
+        let mut wtr = Writer::from_path(file_path).expect("Couldn't create CSV writer");
+
+        for i in 6677021..=7096449 {
+            let file_path = Path::new(env!("HOME"))
+                .join("Downloads")
+                .join("src")
+                .join("fixtures")
+                .join("testnet_block")
+                .join(format!("{}.bin", i));
+            let raw_input = File::open(file_path).unwrap();
+
+            let input: Input = bincode::deserialize_from(&raw_input).unwrap();
+            let mut stdin = SP1Stdin::new();
+
+            stdin.write(&input);
+            let client = ProverClient::mock();
+            let (output, report) = client.execute(FUEL_SP1_ELF, stdin).run().unwrap();
+
+            let report = MainnetExecutionReport {
+                block_number: i,
+                cycle_count: report.total_instruction_count(),
+                memory_address_count: report.touched_memory_addresses,
+                syscall_count: report.total_syscall_count(),
+            };
+
+            wtr.serialize(report).expect("Couldn't write to CSV");
+
+            // flush after each execution
+            wtr.flush().expect("Couldn't flush CSV writer");
+        }
     }
 }
