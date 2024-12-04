@@ -13,9 +13,7 @@
 use alloy_sol_types::SolType;
 use clap::{Parser, ValueEnum};
 use fuel_zkvm_primitives_prover::{Input, PublicValuesStruct};
-use fuel_zkvm_primitives_test_fixtures::{
-    opcodes::start_node_with_transaction_and_produce_prover_input, Fixture,
-};
+use fuel_zkvm_primitives_test_fixtures::Fixture;
 use serde::{Deserialize, Serialize};
 use sp1_sdk::{HashableKey, ProverClient, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey};
 use std::path::PathBuf;
@@ -68,24 +66,9 @@ async fn main() {
     // Setup the inputs.
     let mut stdin = SP1Stdin::new();
 
-    match args.fixture {
-        Fixture::MainnetBlock(block) => {
-            tracing::info!("Mainnet block: {:?}", block);
-            let raw_input =
-                fuel_zkvm_primitives_test_fixtures::mainnet_blocks::get_mainnet_block_input(block);
-            let input: Input = bincode::deserialize(&raw_input).unwrap();
-
-            stdin.write(&input);
-        }
-        Fixture::Opcode(opcode) => {
-            tracing::info!("Opcode args: {:?}", opcode);
-
-            let service =
-                start_node_with_transaction_and_produce_prover_input(opcode).await.unwrap();
-
-            stdin.write(&service.input);
-        }
-    }
+    let raw_input = Fixture::get_input_for_fixture(&args.fixture);
+    let input: Input = bincode::deserialize(&raw_input).unwrap();
+    stdin.write(&input);
 
     tracing::info!("Proof System: {:?}", args.system);
 

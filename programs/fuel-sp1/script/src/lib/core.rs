@@ -1,36 +1,16 @@
 use alloy_sol_types::SolType;
 use fuel_zkvm_primitives_prover::{Input, PublicValuesStruct};
-use fuel_zkvm_primitives_test_fixtures::{
-    opcodes::start_node_with_transaction_and_produce_prover_input, Fixture,
-};
+use fuel_zkvm_primitives_test_fixtures::Fixture;
 use sp1_sdk::{ExecutionReport, ProverClient, SP1Stdin};
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
 pub const FUEL_SP1_ELF: &[u8] = include_bytes!("../../../elf/riscv32im-succinct-zkvm-elf");
 
 pub async fn run_fixture(fixture: Fixture, stdin: &mut SP1Stdin) -> [u8; 32] {
-    let block_id: [u8; 32];
-
-    match fixture {
-        Fixture::MainnetBlock(block) => {
-            tracing::info!("Mainnet block: {:?}", block);
-            let raw_input =
-                fuel_zkvm_primitives_test_fixtures::mainnet_blocks::get_mainnet_block_input(block);
-            let input: Input = bincode::deserialize(&raw_input).unwrap();
-
-            block_id = input.block.header().id().into();
-            stdin.write(&input);
-        }
-        Fixture::Opcode(opcode) => {
-            tracing::info!("Opcode args: {:?}", opcode);
-
-            let service =
-                start_node_with_transaction_and_produce_prover_input(opcode).await.unwrap();
-
-            block_id = service.input.block.header().id().into();
-            stdin.write(&service.input);
-        }
-    }
+    let raw_input = Fixture::get_input_for_fixture(&fixture);
+    let input: Input = bincode::deserialize(&raw_input).unwrap();
+    let block_id = input.block.header().id().into();
+    stdin.write(&input);
 
     block_id
 }
@@ -111,14 +91,5 @@ mod tests {
 
             tracing::info!("Executed fixture: {:?}", fixture);
         }
-    }
-
-    #[tokio::test]
-    async fn run_ed19() {
-        // this makes it so the ed19 fixture is used
-        let skipped = all_fixtures().iter().cloned().skip(81).collect::<Vec<_>>();
-        let fixture = skipped.first().unwrap();
-        let stdin = SP1Stdin::new();
-        let _ = execute_program(fixture.clone(), &ProverClient::new(), stdin).await;
     }
 }
