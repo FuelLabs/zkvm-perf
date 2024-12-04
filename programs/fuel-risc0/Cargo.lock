@@ -3827,7 +3827,7 @@ dependencies = [
 [[package]]
 name = "fuel-zkvm-primitives-input-provider"
 version = "0.1.0"
-source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=b4f4195#b4f41953111d4d9e8554e8427c04a2a0843bb6c5"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=d898f37#d898f373deef592e509db611b3d90fd76e93c417"
 dependencies = [
  "alloy-sol-types",
  "anyhow",
@@ -3844,7 +3844,7 @@ dependencies = [
 [[package]]
 name = "fuel-zkvm-primitives-prover"
 version = "0.1.0"
-source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=b4f4195#b4f41953111d4d9e8554e8427c04a2a0843bb6c5"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=d898f37#d898f373deef592e509db611b3d90fd76e93c417"
 dependencies = [
  "alloy-sol-types",
  "anyhow",
@@ -3858,7 +3858,7 @@ dependencies = [
 [[package]]
 name = "fuel-zkvm-primitives-test-fixtures"
 version = "0.1.0"
-source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=b4f4195#b4f41953111d4d9e8554e8427c04a2a0843bb6c5"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=d898f37#d898f373deef592e509db611b3d90fd76e93c417"
 dependencies = [
  "anyhow",
  "bincode",
@@ -3874,6 +3874,7 @@ dependencies = [
  "fuel-zkvm-primitives-utils",
  "fuels",
  "fuels-core",
+ "primitive-types",
  "serde",
  "serde_json",
  "tempfile",
@@ -3884,7 +3885,7 @@ dependencies = [
 [[package]]
 name = "fuel-zkvm-primitives-utils"
 version = "0.1.0"
-source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=b4f4195#b4f41953111d4d9e8554e8427c04a2a0843bb6c5"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=d898f37#d898f373deef592e509db611b3d90fd76e93c417"
 dependencies = [
  "anyhow",
  "bincode",

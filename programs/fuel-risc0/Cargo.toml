@@ -7,8 +7,8 @@ resolver = "2"
 
 [workspace.dependencies]
 alloy-sol-types = "0.7.7"
-fuel-zkvm-primitives-prover = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "b4f4195" }
-fuel-zkvm-primitives-input-provider = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "b4f4195" }
+fuel-zkvm-primitives-prover = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "d898f37" }
+fuel-zkvm-primitives-input-provider = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "d898f37" }
 
 [profile.release]
 codegen-units = 1

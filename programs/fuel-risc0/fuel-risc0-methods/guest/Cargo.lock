@@ -1279,7 +1279,7 @@ dependencies = [
 [[package]]
 name = "fuel-zkvm-primitives-prover"
 version = "0.1.0"
-source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=b4f4195#b4f41953111d4d9e8554e8427c04a2a0843bb6c5"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=d898f37#d898f373deef592e509db611b3d90fd76e93c417"
 dependencies = [
  "alloy-sol-types",
  "anyhow",
