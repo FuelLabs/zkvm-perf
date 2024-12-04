@@ -116,7 +116,7 @@ mod tests {
     #[tokio::test]
     async fn run_ed19() {
         // this makes it so the ed19 fixture is used
-        let skipped = all_fixtures().iter().cloned().skip(82).collect::<Vec<_>>();
+        let skipped = all_fixtures().iter().cloned().skip(81).collect::<Vec<_>>();
         let fixture = skipped.first().unwrap();
         let stdin = SP1Stdin::new();
         let _ = execute_program(fixture.clone(), &ProverClient::new(), stdin).await;
