@@ -4230,6 +4230,7 @@ dependencies = [
 [[package]]
 name = "fuel-zkvm-primitives-input-provider"
 version = "0.1.0"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=0eadfc8#0eadfc86a0071c9b570d9fbde48bf6e5fc1e325a"
 dependencies = [
  "anyhow",
  "fuel-core-executor",
@@ -4242,6 +4243,7 @@ dependencies = [
 [[package]]
 name = "fuel-zkvm-primitives-prover"
 version = "0.1.0"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=0eadfc8#0eadfc86a0071c9b570d9fbde48bf6e5fc1e325a"
 dependencies = [
  "alloy-sol-types 0.7.7",
  "anyhow",
@@ -4255,6 +4257,7 @@ dependencies = [
 [[package]]
 name = "fuel-zkvm-primitives-test-fixtures"
 version = "0.1.0"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=0eadfc8#0eadfc86a0071c9b570d9fbde48bf6e5fc1e325a"
 dependencies = [
  "anyhow",
  "bincode",
@@ -4282,6 +4285,7 @@ dependencies = [
 [[package]]
 name = "fuel-zkvm-primitives-utils"
 version = "0.1.0"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=0eadfc8#0eadfc86a0071c9b570d9fbde48bf6e5fc1e325a"
 dependencies = [
  "clap",
  "ed25519-dalek",
