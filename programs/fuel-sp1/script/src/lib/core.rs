@@ -1,12 +1,12 @@
 use alloy_sol_types::SolType;
 use fuel_zkvm_primitives_prover::{Input, PublicValuesStruct};
 use fuel_zkvm_primitives_test_fixtures::Fixture;
-use sp1_sdk::{ExecutionReport, ProverClient, SP1Stdin};
+use sp1_sdk::{ExecutionReport, ProverClient, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey};
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
 pub const FUEL_SP1_ELF: &[u8] = include_bytes!("../../../elf/riscv32im-succinct-zkvm-elf");
 
-pub async fn run_fixture(fixture: Fixture, stdin: &mut SP1Stdin) -> [u8; 32] {
+pub fn run_fixture(fixture: Fixture, stdin: &mut SP1Stdin) -> [u8; 32] {
     let raw_input = Fixture::get_input_for_fixture(&fixture);
     let input: Input = bincode::deserialize(&raw_input).unwrap();
     let block_id = input.block.header().id().into();
@@ -15,12 +15,12 @@ pub async fn run_fixture(fixture: Fixture, stdin: &mut SP1Stdin) -> [u8; 32] {
     block_id
 }
 
-pub async fn execute_program(
+pub fn execute_program(
     fixture: Fixture,
     client: &ProverClient,
     mut stdin: SP1Stdin,
 ) -> ExecutionReport {
-    let block_id = run_fixture(fixture, &mut stdin).await;
+    let block_id = run_fixture(fixture, &mut stdin);
 
     // Execute the program
     let (output, report) = client.execute(FUEL_SP1_ELF, stdin).run().unwrap();
@@ -33,12 +33,12 @@ pub async fn execute_program(
     report
 }
 
-pub async fn prove_and_verify_program(
+pub fn prove_program(
     fixture: Fixture,
     client: &ProverClient,
     mut stdin: SP1Stdin,
-) {
-    let _ = run_fixture(fixture, &mut stdin).await;
+) -> (SP1ProofWithPublicValues, SP1VerifyingKey) {
+    let _ = run_fixture(fixture, &mut stdin);
 
     // Setup the program for proving.
     let (pk, vk) = client.setup(FUEL_SP1_ELF);
@@ -46,8 +46,7 @@ pub async fn prove_and_verify_program(
     // Generate the proof
     let proof = client.prove(&pk, stdin).run().expect("failed to generate proof");
 
-    // Verify the proof
-    client.verify(&proof, &vk).expect("failed to verify proof");
+    (proof, vk)
 }
 
 #[cfg(test)]
@@ -65,8 +64,15 @@ mod tests {
         syscall_count: u64,
     }
 
-    #[tokio::test]
-    async fn run_all_fixtures_and_collect_report() {
+    #[derive(Serialize)]
+    struct ProvingReport {
+        fixture: Fixture,
+        proving_time: u128,
+        verification_time: u128,
+    }
+
+    #[test]
+    fn run_all_fixtures_and_collect_report() {
         let fixtures = all_fixtures();
 
         let file_path =
@@ -75,7 +81,7 @@ mod tests {
 
         for fixture in fixtures {
             let stdin = SP1Stdin::new();
-            let report = execute_program(fixture.clone(), &ProverClient::new(), stdin).await;
+            let report = execute_program(fixture.clone(), &ProverClient::new(), stdin);
 
             let perf_report = ExecutionReport {
                 fixture: fixture.clone(),
@@ -90,6 +96,38 @@ mod tests {
             wtr.flush().expect("Couldn't flush CSV writer");
 
             tracing::info!("Executed fixture: {:?}", fixture);
+        }
+    }
+
+    #[test]
+    fn prove_all_fixtures_and_collect_report() {
+        let fixtures = all_fixtures();
+
+        let file_path =
+            std::env::var("FUEL_SP1_REPORT").unwrap_or("fuel_sp1_report.csv".to_string());
+        let mut wtr = Writer::from_path(file_path).expect("Couldn't create CSV writer");
+
+        for fixture in fixtures {
+            let stdin = SP1Stdin::new();
+            let client = ProverClient::new();
+
+            let start_time = std::time::Instant::now();
+            let (proof, vk) = prove_program(fixture.clone(), &client, stdin);
+            let proving_time = start_time.elapsed().as_millis();
+
+            let start_time = std::time::Instant::now();
+            client.verify(&proof, &vk).expect("failed to verify proof");
+            let verification_time = start_time.elapsed().as_millis();
+
+            let perf_report =
+                ProvingReport { fixture: fixture.clone(), proving_time, verification_time };
+
+            wtr.serialize(perf_report).expect("Couldn't write to CSV");
+
+            // flush after each execution
+            wtr.flush().expect("Couldn't flush CSV writer");
+
+            tracing::info!("Proved fixture: {:?}", fixture);
         }
     }
 }

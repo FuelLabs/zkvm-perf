@@ -13,6 +13,7 @@
 //! for better visibility.
 use clap::Parser;
 use fuel_risc0_host::prove_program;
+use fuel_risc0_methods::FUEL_RISC0_PROVER_ID;
 use fuel_zkvm_primitives_test_fixtures::Fixture;
 use risc0_zkvm::ExecutorEnv;
 
@@ -23,8 +24,7 @@ struct Args {
     fixture: Fixture,
 }
 
-#[tokio::main]
-async fn main() {
+fn main() {
     tracing_subscriber::fmt()
         .with_env_filter(tracing_subscriber::filter::EnvFilter::from_default_env())
         .init();
@@ -33,8 +33,6 @@ async fn main() {
 
     let env = ExecutorEnv::builder();
 
-    let output = prove_program(args.fixture, env).await;
-
-    tracing::info!("Proof block id: {:?}", output.block_id);
-    tracing::info!("Proof input hash: {:?}", output.input_hash);
+    let prove_info = prove_program(args.fixture, env);
+    prove_info.receipt.verify(FUEL_RISC0_PROVER_ID).expect("Proof verification failed.");
 }

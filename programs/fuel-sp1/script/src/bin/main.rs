@@ -11,7 +11,7 @@
 //! ```
 
 use clap::{Parser, Subcommand};
-use fuel_script::core::{execute_program, prove_and_verify_program};
+use fuel_script::core::{execute_program, prove_program};
 use fuel_zkvm_primitives_test_fixtures::Fixture;
 use sp1_sdk::{ProverClient, SP1Stdin};
 
@@ -36,8 +36,7 @@ enum Command {
     },
 }
 
-#[tokio::main]
-async fn main() {
+fn main() {
     // Setup the logger.
     sp1_sdk::utils::setup_logger();
 
@@ -54,7 +53,7 @@ async fn main() {
         Command::Execute { fixture } => {
             tracing::info!("Executing the program.");
             // Execute the program.
-            let report = execute_program(fixture, &client, stdin).await;
+            let report = execute_program(fixture, &client, stdin);
             tracing::info!("Program executed successfully.");
 
             // Record the number of cycles executed.
@@ -63,7 +62,8 @@ async fn main() {
         Command::Prove { fixture } => {
             tracing::info!("Proving and verifying the program.");
             // Generate and verify the proof.
-            prove_and_verify_program(fixture, &client, stdin).await;
+            let (proof, vk) = prove_program(fixture, &client, stdin);
+            client.verify(&proof, &vk).expect("failed to verify proof");
             tracing::info!("Successfully generated and verified proof!");
         }
     }

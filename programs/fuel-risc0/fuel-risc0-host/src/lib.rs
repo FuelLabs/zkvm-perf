@@ -80,8 +80,8 @@ mod tests {
         verification_time: u128,
     }
 
-    #[tokio::test]
-    async fn run_all_fixtures_and_collect_report() {
+    #[test]
+    fn run_all_fixtures_and_collect_report() {
         let fixtures = all_fixtures();
 
         let file_path =
@@ -110,8 +110,8 @@ mod tests {
         }
     }
 
-    #[tokio::test]
-    async fn prove_all_fixtures_and_collect_report() {
+    #[test]
+    fn prove_all_fixtures_and_collect_report() {
         let fixtures = all_fixtures();
 
         let file_path =
