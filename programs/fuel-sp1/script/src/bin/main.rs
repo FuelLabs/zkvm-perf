@@ -44,7 +44,7 @@ fn main() {
     let args = Args::parse();
 
     // Setup the prover client.
-    let client = ProverClient::new();
+    let client = ProverClient::from_env();
 
     // Setup the inputs.
     let stdin = SP1Stdin::new();

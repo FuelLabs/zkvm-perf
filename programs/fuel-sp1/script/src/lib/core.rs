@@ -1,10 +1,13 @@
 use alloy_sol_types::SolType;
 use fuel_zkvm_primitives_prover::{Input, PublicValuesStruct};
 use fuel_zkvm_primitives_test_fixtures::Fixture;
-use sp1_sdk::{ExecutionReport, ProverClient, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey};
+use sp1_sdk::{
+    include_elf, EnvProver, ExecutionReport, ProverClient, SP1ProofWithPublicValues, SP1Stdin,
+    SP1VerifyingKey,
+};
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
-pub const FUEL_SP1_ELF: &[u8] = include_bytes!("../../../elf/riscv32im-succinct-zkvm-elf");
+pub const FUEL_SP1_ELF: &[u8] = include_elf!("fuel-program");
 
 pub fn run_fixture(fixture: Fixture, stdin: &mut SP1Stdin) -> [u8; 32] {
     let raw_input = Fixture::get_input_for_fixture(&fixture);
@@ -17,13 +20,13 @@ pub fn run_fixture(fixture: Fixture, stdin: &mut SP1Stdin) -> [u8; 32] {
 
 pub fn execute_program(
     fixture: Fixture,
-    client: &ProverClient,
+    client: &EnvProver,
     mut stdin: SP1Stdin,
 ) -> ExecutionReport {
     let block_id = run_fixture(fixture, &mut stdin);
 
     // Execute the program
-    let (output, report) = client.execute(FUEL_SP1_ELF, stdin).run().unwrap();
+    let (output, report) = client.execute(FUEL_SP1_ELF, &stdin).run().unwrap();
     tracing::info!("Program executed successfully.");
 
     let output = PublicValuesStruct::abi_decode(output.as_slice(), true).unwrap();
@@ -35,7 +38,7 @@ pub fn execute_program(
 
 pub fn prove_program(
     fixture: Fixture,
-    client: &ProverClient,
+    client: &EnvProver,
     mut stdin: SP1Stdin,
 ) -> (SP1ProofWithPublicValues, SP1VerifyingKey) {
     let _ = run_fixture(fixture, &mut stdin);
@@ -44,7 +47,7 @@ pub fn prove_program(
     let (pk, vk) = client.setup(FUEL_SP1_ELF);
 
     // Generate the proof
-    let proof = client.prove(&pk, stdin).run().expect("failed to generate proof");
+    let proof = client.prove(&pk, &stdin).run().expect("failed to generate proof");
 
     (proof, vk)
 }
@@ -81,7 +84,7 @@ mod tests {
 
         for fixture in fixtures {
             let stdin = SP1Stdin::new();
-            let report = execute_program(fixture.clone(), &ProverClient::new(), stdin);
+            let report = execute_program(fixture.clone(), &ProverClient::from_env(), stdin);
 
             let perf_report = ExecutionReport {
                 fixture: fixture.clone(),
@@ -109,7 +112,7 @@ mod tests {
 
         for fixture in fixtures {
             let stdin = SP1Stdin::new();
-            let client = ProverClient::new();
+            let client = ProverClient::from_env();
 
             let start_time = std::time::Instant::now();
             let (proof, vk) = prove_program(fixture.clone(), &client, stdin);
