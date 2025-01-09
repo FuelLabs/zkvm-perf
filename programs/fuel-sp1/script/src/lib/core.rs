@@ -109,10 +109,10 @@ mod tests {
         let file_path =
             std::env::var("FUEL_SP1_REPORT").unwrap_or("fuel_sp1_report.csv".to_string());
         let mut wtr = Writer::from_path(file_path).expect("Couldn't create CSV writer");
+        let client = ProverClient::from_env();
 
         for fixture in fixtures {
             let stdin = SP1Stdin::new();
-            let client = ProverClient::from_env();
 
             let start_time = std::time::Instant::now();
             let (proof, vk) = prove_program(fixture.clone(), &client, stdin);
