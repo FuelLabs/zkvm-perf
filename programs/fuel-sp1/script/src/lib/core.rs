@@ -1,9 +1,8 @@
 use alloy_sol_types::SolType;
-use fuel_zkvm_primitives_prover::{Input, PublicValuesStruct};
-use fuel_zkvm_primitives_test_fixtures::Fixture;
+use fuel_zkvm_primitives_prover::games::block_execution_game::{Input, PublicValuesStruct};
+use fuel_zkvm_primitives_test_fixtures::block_execution_fixtures::fixtures::Fixture;
 use sp1_sdk::{
-    include_elf, EnvProver, ExecutionReport, ProverClient, SP1ProofWithPublicValues, SP1Stdin,
-    SP1VerifyingKey,
+    include_elf, EnvProver, ExecutionReport, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey,
 };
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
@@ -56,8 +55,9 @@ pub fn prove_program(
 mod tests {
     use super::*;
     use csv::Writer;
-    use fuel_zkvm_primitives_test_fixtures::all_fixtures;
+    use fuel_zkvm_primitives_test_fixtures::block_execution_fixtures::fixtures::all_fixtures;
     use serde::Serialize;
+    use sp1_sdk::ProverClient;
 
     #[derive(Serialize)]
     struct ExecutionReport {

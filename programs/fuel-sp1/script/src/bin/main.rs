@@ -12,7 +12,7 @@
 
 use clap::{Parser, Subcommand};
 use fuel_script::core::{execute_program, prove_program};
-use fuel_zkvm_primitives_test_fixtures::Fixture;
+use fuel_zkvm_primitives_test_fixtures::block_execution_fixtures::fixtures::Fixture;
 use sp1_sdk::{ProverClient, SP1Stdin};
 
 /// The arguments for the command.
