@@ -10,8 +10,8 @@ alloy-sol-types = "0.7.7"
 fuel-zkvm-primitives-prover = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "a3dacf8" }
 fuel-zkvm-primitives-input-provider = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "a3dacf8" }
 fuel-zkvm-primitives-test-fixtures = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "a3dacf8" }
-risc0-zkvm = { version = "1.2.1-rc.0", features = ["unstable"] }
-risc0-build = { version = "1.2.1-rc.0", features = ["unstable"] }
+risc0-zkvm = { version = "1.2.5", features = ["unstable"] }
+risc0-build = { version = "1.2.5", features = ["unstable"] }
 
 fuel-risc0-methods = { path = "./fuel-risc0-methods" }
 
