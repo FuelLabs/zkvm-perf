@@ -14,7 +14,7 @@
 use clap::Parser;
 use fuel_risc0_host::prove_program;
 use fuel_risc0_methods::FUEL_RISC0_PROVER_ID;
-use fuel_zkvm_primitives_test_fixtures::Fixture;
+use fuel_zkvm_primitives_test_fixtures::block_execution_fixtures::fixtures::Fixture;
 use risc0_zkvm::ExecutorEnv;
 
 #[derive(Parser, Debug)]

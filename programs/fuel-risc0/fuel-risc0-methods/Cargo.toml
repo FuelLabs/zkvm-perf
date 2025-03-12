@@ -5,14 +5,15 @@ edition = "2021"
 
 [dependencies]
 alloy-sol-types = { workspace = true }
-risc0-zkvm = { version = "1.2.1-rc.0", features = ["unstable"] }
 fuel-zkvm-primitives-prover = { workspace = true }
+fuel-zkvm-primitives-test-fixtures = { workspace = true }
+risc0-zkvm = { workspace = true, features = ["unstable"] }
 
 [package.metadata.risc0]
 methods = ["guest"]
 
 [build-dependencies]
-risc0-build = { version = "1.2.1-rc.0", features = ["unstable"] }
+risc0-build = { workspace = true }
 
 [features]
 cuda = ["risc0-zkvm/cuda"]

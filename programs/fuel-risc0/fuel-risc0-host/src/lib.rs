@@ -1,8 +1,8 @@
 use alloy_sol_types::SolType;
 use fuel_risc0_methods::FUEL_RISC0_PROVER_ELF;
-use fuel_zkvm_primitives_prover::{Input, PublicValuesStruct};
-use fuel_zkvm_primitives_test_fixtures::Fixture;
-use risc0_zkvm::{ExecutorEnvBuilder, ProveInfo, SessionInfo};
+use fuel_zkvm_primitives_prover::games::block_execution_game::{Input, PublicValuesStruct};
+use fuel_zkvm_primitives_test_fixtures::block_execution_fixtures::fixtures::Fixture;
+use risc0_zkvm::{ExecutorEnvBuilder, ProveInfo};
 
 pub fn run_fixture(fixture: Fixture, env: &mut ExecutorEnvBuilder<'_>) -> [u8; 32] {
     let raw_input = Fixture::get_input_for_fixture(&fixture);
@@ -13,8 +13,11 @@ pub fn run_fixture(fixture: Fixture, env: &mut ExecutorEnvBuilder<'_>) -> [u8; 3
     block_id
 }
 
-#[allow(unused)]
-pub fn execute_program(fixture: Fixture, mut env: ExecutorEnvBuilder<'_>) -> SessionInfo {
+#[cfg(test)]
+pub fn execute_program(
+    fixture: Fixture,
+    mut env: ExecutorEnvBuilder<'_>,
+) -> risc0_zkvm::SessionInfo {
     let _ = run_fixture(fixture, &mut env);
 
     let executor = risc0_zkvm::default_executor();
@@ -41,7 +44,7 @@ mod tests {
     use super::*;
     use csv::WriterBuilder;
     use fuel_risc0_methods::FUEL_RISC0_PROVER_ID;
-    use fuel_zkvm_primitives_test_fixtures::all_fixtures;
+    use fuel_zkvm_primitives_test_fixtures::block_execution_fixtures::fixtures::all_fixtures;
     use risc0_zkvm::SegmentInfo;
     use serde::Serialize;
 
