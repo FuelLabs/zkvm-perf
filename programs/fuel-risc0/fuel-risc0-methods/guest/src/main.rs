@@ -1,5 +1,5 @@
 use alloy_sol_types::SolType;
-use fuel_zkvm_primitives_prover::{prove, PublicValuesStruct};
+use fuel_zkvm_primitives_prover::games::block_execution_game::{prove, PublicValuesStruct};
 use risc0_zkvm::guest::env;
 
 fn main() {
