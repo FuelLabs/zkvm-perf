@@ -18,6 +18,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f26201604c87b1e01bd3d98f8d5d9a8fcbb815e8cedb41ffccbeb4bf593a35fe"
 
 [[package]]
+name = "adler2"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "512761e0bb2578dd7380c6baaa0f4ce03e84f95e960231d1dec8bf4d7d6e2627"
+
+[[package]]
 name = "ahash"
 version = "0.8.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -434,7 +440,7 @@ dependencies = [
  "cc",
  "cfg-if",
  "libc",
- "miniz_oxide",
+ "miniz_oxide 0.7.4",
  "object",
  "rustc-demangle",
  "serde",
@@ -731,6 +737,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "59ed5838eebb26a2bb2e58f6d5b5316989ae9d08bab10e0e6d103e656d1b0280"
 dependencies = [
  "libc",
+]
+
+[[package]]
+name = "crc32fast"
+version = "1.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a97769d94ddab943e4510d138150169a2758b5ef3eb191a9ee688de3e23ef7b3"
+dependencies = [
+ "cfg-if",
 ]
 
 [[package]]
@@ -1069,6 +1084,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "enum_dispatch"
+version = "0.3.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aa18ce2bc66555b3218614519ac839ddb759a7d6720732f979ef8d13be147ecd"
+dependencies = [
+ "once_cell",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.100",
+]
+
+[[package]]
 name = "equivalent"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1147,6 +1174,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "flate2"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "11faaf5a5236997af9848be0bef4db95824b1d534ebc64d0f0c6cf3e67bd38dc"
+dependencies = [
+ "crc32fast",
+ "miniz_oxide 0.8.5",
+]
+
+[[package]]
 name = "fnv"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1189,6 +1226,47 @@ dependencies = [
  "fuel-types",
  "serde",
  "strum 0.24.1",
+]
+
+[[package]]
+name = "fuel-block-committer-encoding"
+version = "0.10.7"
+source = "git+https://github.com/fuellabs/fuel-block-committer?rev=ad6281e#ad6281efdf2f6f276704331d499b92b9f6c21631"
+dependencies = [
+ "anyhow",
+ "bitvec",
+ "flate2",
+ "hex",
+ "itertools 0.13.0",
+ "postcard",
+ "serde",
+ "static_assertions",
+]
+
+[[package]]
+name = "fuel-compression"
+version = "0.59.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c926e0dc3a4155607e2e4fe364b4bb7c8b6a75605fd0922e4887ce2a4809b600"
+dependencies = [
+ "fuel-derive",
+ "fuel-types",
+ "serde",
+]
+
+[[package]]
+name = "fuel-core-compression"
+version = "0.41.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "12ca7dd24807ffa44b7ceb23edc47da6c943dd54b1368b1c6df4f5d6abe33d53"
+dependencies = [
+ "anyhow",
+ "enum_dispatch",
+ "fuel-core-types",
+ "paste",
+ "serde",
+ "strum 0.25.0",
+ "strum_macros 0.25.3",
 ]
 
 [[package]]
@@ -1316,6 +1394,7 @@ dependencies = [
  "derive_more 1.0.0",
  "educe",
  "fuel-asm",
+ "fuel-compression",
  "fuel-crypto",
  "fuel-merkle",
  "fuel-types",
@@ -1354,6 +1433,7 @@ dependencies = [
  "educe",
  "ethnum",
  "fuel-asm",
+ "fuel-compression",
  "fuel-crypto",
  "fuel-merkle",
  "fuel-storage",
@@ -1378,16 +1458,20 @@ dependencies = [
 [[package]]
 name = "fuel-zkvm-primitives-prover"
 version = "0.1.0"
-source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=a3dacf8#a3dacf849ce651302fc675028bea4b0394e7f846"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=8f8c7ea#8f8c7eac79818b9879941f1b40ab2ce68677bff4"
 dependencies = [
  "alloy-sol-types",
  "anyhow",
  "bincode",
+ "fuel-block-committer-encoding",
+ "fuel-core-compression",
  "fuel-core-executor",
  "fuel-core-storage",
  "fuel-core-types",
+ "postcard",
  "serde",
  "tai64",
+ "thiserror",
 ]
 
 [[package]]
@@ -1646,6 +1730,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "itertools"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "413ee7dfc52ee1a4949ceeb7dbc8a33f2d6c088194d9f922fb8318faf1f01186"
+dependencies = [
+ "either",
+]
+
+[[package]]
 name = "itoa"
 version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1780,6 +1873,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b8a240ddb74feaf34a79a7add65a741f3167852fba007066dcac1ca548d89c08"
 dependencies = [
  "adler",
+]
+
+[[package]]
+name = "miniz_oxide"
+version = "0.8.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8e3e04debbb59698c15bacbb6d93584a8c0ca9cc3213cb423d31f760d8843ce5"
+dependencies = [
+ "adler2",
 ]
 
 [[package]]

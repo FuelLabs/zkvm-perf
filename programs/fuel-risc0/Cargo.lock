@@ -3088,6 +3088,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "fuel-block-committer-encoding"
+version = "0.10.7"
+source = "git+https://github.com/fuellabs/fuel-block-committer?rev=ad6281e#ad6281efdf2f6f276704331d499b92b9f6c21631"
+dependencies = [
+ "anyhow",
+ "bitvec",
+ "flate2",
+ "hex",
+ "itertools 0.13.0",
+ "postcard",
+ "serde",
+ "static_assertions",
+]
+
+[[package]]
 name = "fuel-compression"
 version = "0.59.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3869,7 +3884,7 @@ dependencies = [
 [[package]]
 name = "fuel-zkvm-primitives-input-provider"
 version = "0.1.0"
-source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=a3dacf8#a3dacf849ce651302fc675028bea4b0394e7f846"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=8f8c7ea#8f8c7eac79818b9879941f1b40ab2ce68677bff4"
 dependencies = [
  "anyhow",
  "fuel-core-executor",
@@ -3883,22 +3898,26 @@ dependencies = [
 [[package]]
 name = "fuel-zkvm-primitives-prover"
 version = "0.1.0"
-source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=a3dacf8#a3dacf849ce651302fc675028bea4b0394e7f846"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=8f8c7ea#8f8c7eac79818b9879941f1b40ab2ce68677bff4"
 dependencies = [
  "alloy-sol-types",
  "anyhow",
  "bincode",
+ "fuel-block-committer-encoding",
+ "fuel-core-compression",
  "fuel-core-executor",
  "fuel-core-storage",
  "fuel-core-types 0.41.9",
+ "postcard",
  "serde",
  "tai64",
+ "thiserror 2.0.12",
 ]
 
 [[package]]
 name = "fuel-zkvm-primitives-test-fixtures"
 version = "0.1.0"
-source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=a3dacf8#a3dacf849ce651302fc675028bea4b0394e7f846"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=8f8c7ea#8f8c7eac79818b9879941f1b40ab2ce68677bff4"
 dependencies = [
  "anyhow",
  "bincode",
@@ -3926,7 +3945,7 @@ dependencies = [
 [[package]]
 name = "fuel-zkvm-primitives-utils"
 version = "0.1.0"
-source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=a3dacf8#a3dacf849ce651302fc675028bea4b0394e7f846"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=8f8c7ea#8f8c7eac79818b9879941f1b40ab2ce68677bff4"
 dependencies = [
  "clap",
  "ed25519-dalek",
@@ -5247,6 +5266,15 @@ name = "itertools"
 version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ba291022dbbd398a455acf126c1e341954079855bc60dfdda641363bd6922569"
+dependencies = [
+ "either",
+]
+
+[[package]]
+name = "itertools"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "413ee7dfc52ee1a4949ceeb7dbc8a33f2d6c088194d9f922fb8318faf1f01186"
 dependencies = [
  "either",
 ]
