@@ -13,7 +13,7 @@ fuel-zkvm-primitives-test-fixtures = { git = "https://github.com/FuelLabs/zkvm-p
 curve25519-dalek = { git = "https://github.com/sp1-patches/curve25519-dalek", tag = "patch-4.1.3-sp1-4.0.0-rc.3" }
 sp1-zkvm = { version = "4.1.3" }
 sp1-helper = { version = "4.1.3" }
-sp1-sdk = { version = "4.1.3", default-features = false }
+sp1-sdk = { version = "4.1.3" }
 
 [profile.release]
 codegen-units = 1
