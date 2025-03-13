@@ -3,15 +3,15 @@
 //!
 //! You can run this script using the following command:
 //! ```shell
-//! RUST_LOG=info cargo run --release --bin block-execution-game-sp1-core -- execute add
+//! RUST_LOG=info cargo run --release --bin block-execution-game-sp1-core -- execute_fixture add
 //! ```
 //! or
 //! ```shell
-//! RUST_LOG=info cargo run --release --bin block-execution-game-sp1-core -- prove add
+//! RUST_LOG=info cargo run --release --bin block-execution-game-sp1-core -- prove_fixture add
 //! ```
 
 use clap::{Parser, Subcommand};
-use fuel_proving_games_sp1::block_execution_game::core::{execute_program, prove_program};
+use fuel_proving_games_sp1::block_execution_game::core::{execute_fixture, prove_fixture};
 use fuel_zkvm_primitives_test_fixtures::block_execution_fixtures::fixtures::Fixture;
 use sp1_sdk::{ProverClient, SP1Stdin};
 
@@ -26,17 +26,17 @@ struct Args {
 #[derive(Subcommand, Debug)]
 #[clap(name = "command", about = "The command to execute", rename_all = "snake_case")]
 enum Command {
-    Execute {
+    ExecuteFixture {
         #[arg(value_enum)]
         fixture: Fixture,
     },
-    Prove {
+    ProveFixture {
         #[arg(value_enum)]
         fixture: Fixture,
     },
 }
 
-fn main() {
+fn main() -> fuel_proving_games_sp1::Result<()> {
     // Setup the logger.
     sp1_sdk::utils::setup_logger();
 
@@ -50,21 +50,23 @@ fn main() {
     let stdin = SP1Stdin::new();
 
     match args.command {
-        Command::Execute { fixture } => {
-            tracing::info!("Executing the program.");
+        Command::ExecuteFixture { fixture } => {
+            tracing::info!("Executing the fixture.");
             // Execute the program.
-            let report = execute_program(fixture, &client, stdin);
-            tracing::info!("Program executed successfully.");
+            let report = execute_fixture(fixture, &client, stdin)?;
+            tracing::info!("fixture executed successfully.");
 
             // Record the number of cycles executed.
             tracing::info!("Number of cycles: {}", report.total_instruction_count());
         }
-        Command::Prove { fixture } => {
-            tracing::info!("Proving and verifying the program.");
+        Command::ProveFixture { fixture } => {
+            tracing::info!("Proving and verifying the fixture.");
             // Generate and verify the proof.
-            let (proof, vk) = prove_program(fixture, &client, stdin);
+            let (proof, vk) = prove_fixture(fixture, &client, stdin)?;
             client.verify(&proof, &vk).expect("failed to verify proof");
             tracing::info!("Successfully generated and verified proof!");
         }
     }
+
+    Ok(())
 }

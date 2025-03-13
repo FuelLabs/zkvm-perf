@@ -3960,6 +3960,7 @@ dependencies = [
  "serde_json",
  "sp1-helper",
  "sp1-sdk",
+ "thiserror 2.0.12",
  "tokio",
  "tracing",
 ]

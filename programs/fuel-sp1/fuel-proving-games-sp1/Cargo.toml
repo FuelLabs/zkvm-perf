@@ -27,6 +27,7 @@ hex = "0.4.3"
 serde = { version = "1.0", default-features = false, features = ["derive"] }
 serde_json = { version = "1.0", default-features = false, features = ["alloc"] }
 sp1-sdk = { workspace = true }
+thiserror = "2.0.12"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 tracing = "0.1.40"
 
