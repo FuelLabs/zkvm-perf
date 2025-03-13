@@ -42,7 +42,7 @@ pub fn prove_fixture(
     client: &EnvProver,
     mut stdin: SP1Stdin,
 ) -> Result<(SP1ProofWithPublicValues, SP1VerifyingKey)> {
-    let _ = add_fixture_input_to_stdin(fixture, &mut stdin);
+    let _ = add_fixture_input_to_stdin(fixture, &mut stdin)?;
 
     // Setup the program for proving.
     let (pk, vk) = client.setup(FUEL_SP1_ELF);
