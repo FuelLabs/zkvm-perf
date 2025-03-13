@@ -1,5 +1,4 @@
-//! A simple program that takes a number `n` as input, and writes the `n-1`th and `n`th fibonacci
-//! number as an output.
+//! contains the sp1 hook for running the block execution game
 
 // These two lines are necessary for the program to properly compile.
 //

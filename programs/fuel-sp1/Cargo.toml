@@ -1,7 +1,8 @@
 [workspace]
 members = [
-    "program",
-    "script",
+    "fuel-block-execution-game-sp1",
+    "fuel-decompression-game-sp1",
+    "fuel-proving-games-sp1",
 ]
 resolver = "2"
 

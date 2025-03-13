@@ -3,15 +3,15 @@
 //!
 //! You can run this script using the following command:
 //! ```shell
-//! RUST_LOG=info cargo run --release -- execute add
+//! RUST_LOG=info cargo run --release --bin block-execution-game-sp1-core -- execute add
 //! ```
 //! or
 //! ```shell
-//! RUST_LOG=info cargo run --release -- prove add
+//! RUST_LOG=info cargo run --release --bin block-execution-game-sp1-core -- prove add
 //! ```
 
 use clap::{Parser, Subcommand};
-use fuel_script::core::{execute_program, prove_program};
+use fuel_proving_games_sp1::block_execution_game::core::{execute_program, prove_program};
 use fuel_zkvm_primitives_test_fixtures::block_execution_fixtures::fixtures::Fixture;
 use sp1_sdk::{ProverClient, SP1Stdin};
 

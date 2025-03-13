@@ -3335,6 +3335,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "fuel-block-execution-game-sp1"
+version = "0.1.0"
+dependencies = [
+ "alloy-sol-types 0.7.7",
+ "curve25519-dalek",
+ "fuel-zkvm-primitives-prover",
+ "sp1-zkvm",
+]
+
+[[package]]
 name = "fuel-compression"
 version = "0.59.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3860,6 +3870,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "fuel-decompression-game-sp1"
+version = "0.1.0"
+dependencies = [
+ "alloy-sol-types 0.7.7",
+ "curve25519-dalek",
+ "fuel-zkvm-primitives-prover",
+ "sp1-zkvm",
+]
+
+[[package]]
 name = "fuel-derive"
 version = "0.56.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3925,17 +3945,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "fuel-program"
-version = "0.1.0"
-dependencies = [
- "alloy-sol-types 0.7.7",
- "curve25519-dalek",
- "fuel-zkvm-primitives-prover",
- "sp1-zkvm",
-]
-
-[[package]]
-name = "fuel-script"
+name = "fuel-proving-games-sp1"
 version = "0.1.0"
 dependencies = [
  "alloy-sol-types 0.7.7",

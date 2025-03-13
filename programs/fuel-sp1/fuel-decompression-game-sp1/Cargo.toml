@@ -1,6 +1,6 @@
 [package]
 version = "0.1.0"
-name = "fuel-program"
+name = "fuel-decompression-game-sp1"
 edition = "2021"
 
 [dependencies]

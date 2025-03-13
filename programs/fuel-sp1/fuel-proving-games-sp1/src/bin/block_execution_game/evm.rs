@@ -3,25 +3,21 @@
 //!
 //! You can run this script using the following command:
 //! ```shell
-//! RUST_LOG=info cargo run --release --bin evm -- add --system groth16
+//! RUST_LOG=info cargo run --release --bin block-execution-game-sp1-evm -- add --system groth16
 //! ```
 //! or
 //! ```shell
-//! RUST_LOG=info cargo run --release --bin evm -- add --system plonk
+//! RUST_LOG=info cargo run --release --bin block-execution-game-sp1-evm -- add --system plonk
 //! ```
 
 use alloy_sol_types::SolType;
 use clap::{Parser, ValueEnum};
+use fuel_proving_games_sp1::block_execution_game::FUEL_SP1_ELF;
 use fuel_zkvm_primitives_prover::games::block_execution_game::{Input, PublicValuesStruct};
 use fuel_zkvm_primitives_test_fixtures::block_execution_fixtures::fixtures::Fixture;
 use serde::{Deserialize, Serialize};
-use sp1_sdk::{
-    include_elf, HashableKey, ProverClient, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey,
-};
+use sp1_sdk::{HashableKey, ProverClient, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey};
 use std::path::PathBuf;
-
-/// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
-pub const FUEL_SP1_ELF: &[u8] = include_elf!("fuel-program");
 
 /// The arguments for the EVM command.
 #[derive(Parser, Debug)]

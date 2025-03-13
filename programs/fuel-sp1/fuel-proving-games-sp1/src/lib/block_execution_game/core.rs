@@ -1,12 +1,8 @@
+use crate::block_execution_game::FUEL_SP1_ELF;
 use alloy_sol_types::SolType;
 use fuel_zkvm_primitives_prover::games::block_execution_game::{Input, PublicValuesStruct};
 use fuel_zkvm_primitives_test_fixtures::block_execution_fixtures::fixtures::Fixture;
-use sp1_sdk::{
-    include_elf, EnvProver, ExecutionReport, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey,
-};
-
-/// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
-pub const FUEL_SP1_ELF: &[u8] = include_elf!("fuel-program");
+use sp1_sdk::{EnvProver, ExecutionReport, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey};
 
 pub fn run_fixture(fixture: Fixture, stdin: &mut SP1Stdin) -> [u8; 32] {
     let raw_input = Fixture::get_input_for_fixture(&fixture);

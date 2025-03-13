@@ -1,19 +1,19 @@
 [package]
 version = "0.1.0"
-name = "fuel-script"
+name = "fuel-proving-games-sp1"
 edition = "2021"
-default-run = "fuel"
+default-run = "block-execution-game-sp1-core"
 
 [[bin]]
-name = "fuel"
-path = "src/bin/main.rs"
+name = "block-execution-game-sp1-core"
+path = "src/bin/block_execution_game/core.rs"
 
 [[bin]]
-name = "evm"
-path = "src/bin/evm.rs"
+name = "block-execution-game-sp1-evm"
+path = "src/bin/block_execution_game/evm.rs"
 
 [lib]
-name = "fuel_script"
+name = "fuel_proving_games_sp1"
 path = "src/lib/lib.rs"
 
 [dependencies]
