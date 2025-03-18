@@ -9,7 +9,7 @@
 sp1_zkvm::entrypoint!(main);
 
 use alloy_sol_types::SolType;
-use fuel_zkvm_primitives_prover::games::decompression_gzip_game::{prove, PublicValuesStruct};
+use fuel_zkvm_primitives_prover::games::decompression_game::{prove, PublicValuesStruct};
 
 pub fn main() {
     // Read an input to the program.

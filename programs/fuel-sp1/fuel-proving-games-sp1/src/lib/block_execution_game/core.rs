@@ -83,8 +83,8 @@ mod tests {
     fn run_all_fixtures_and_collect_report() {
         let fixtures = all_fixtures();
 
-        let file_path =
-            std::env::var("FUEL_SP1_REPORT").unwrap_or("fuel_sp1_report.csv".to_string());
+        let file_path = std::env::var("FUEL_SP1_REPORT")
+            .unwrap_or("fuel_sp1_block_execution_report.csv".to_string());
         let mut wtr = Writer::from_path(file_path).expect("Couldn't create CSV writer");
         let prover_client = ProverClient::from_env();
 
@@ -112,8 +112,8 @@ mod tests {
     fn prove_all_fixtures_and_collect_report() {
         let fixtures = all_fixtures();
 
-        let file_path =
-            std::env::var("FUEL_SP1_REPORT").unwrap_or("fuel_sp1_report.csv".to_string());
+        let file_path = std::env::var("FUEL_SP1_REPORT")
+            .unwrap_or("fuel_sp1_block_execution_report.csv".to_string());
         let mut wtr = Writer::from_path(file_path).expect("Couldn't create CSV writer");
         let client = ProverClient::from_env();
 

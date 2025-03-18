@@ -12,6 +12,14 @@ path = "src/bin/block_execution_game/core.rs"
 name = "block-execution-game-sp1-evm"
 path = "src/bin/block_execution_game/evm.rs"
 
+[[bin]]
+name = "decompression-game-sp1-core"
+path = "src/bin/decompression_game/core.rs"
+
+[[bin]]
+name = "decompression-game-sp1-evm"
+path = "src/bin/decompression_game/evm.rs"
+
 [lib]
 name = "fuel_proving_games_sp1"
 path = "src/lib/lib.rs"
