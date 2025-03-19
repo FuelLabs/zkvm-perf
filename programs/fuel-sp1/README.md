@@ -23,8 +23,21 @@ We have `fuel-proving-games-sp1` which aims to aggregate these and provides the 
 
 ## Run proving tests
 
-TBD
+```
+cargo test -p fuel-proving-games-sp1 prove_all_fixtures_and_collect_report
+```
+
+Make sure you use the correct env vars for the specific prover.
+
+For CUDA proving, use the following feature flag:
+```
+SP1_PROVER=cuda cargo test -p fuel-proving-games-sp1 prove_all_fixtures_and_collect_report --features cuda
+```
+
+see [here](https://docs.succinct.xyz/docs/sp1/generating-proofs/hardware-acceleration/cuda#usage) for cuda instructions specific to sp1.
 
 ## Run execution tests
 
-TBD
+```
+cargo test -p fuel-proving-games-sp1 run_all_fixtures_and_collect_report
+```
