@@ -1,19 +1,17 @@
 [workspace]
 members = [
-    "fuel-risc0-host",
-    "fuel-risc0-methods",
+    "fuel-proving-games-risc0",
 ]
 resolver = "2"
 
 [workspace.dependencies]
 alloy-sol-types = "0.7.7"
-fuel-zkvm-primitives-prover = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "8f8c7ea" }
-fuel-zkvm-primitives-input-provider = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "8f8c7ea" }
-fuel-zkvm-primitives-test-fixtures = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "8f8c7ea" }
+fuel-zkvm-primitives-prover = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "6a43f0f" }
+fuel-zkvm-primitives-input-provider = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "6a43f0f" }
+fuel-zkvm-primitives-test-fixtures = { git = "https://github.com/FuelLabs/zkvm-primitives", rev = "6a43f0f" }
 risc0-zkvm = { version = "1.2.5", features = ["unstable"] }
 risc0-build = { version = "1.2.5", features = ["unstable"] }
-
-fuel-risc0-methods = { path = "./fuel-risc0-methods" }
+fuel-proving-games-risc0 = { path = "./fuel-proving-games-risc0" }
 
 [profile.release]
 codegen-units = 1

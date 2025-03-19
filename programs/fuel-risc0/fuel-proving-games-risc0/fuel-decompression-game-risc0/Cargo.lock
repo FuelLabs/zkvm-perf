@@ -1343,6 +1343,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "fuel-decompression-game-risc0"
+version = "0.1.0"
+dependencies = [
+ "alloy-sol-types",
+ "fuel-zkvm-primitives-prover",
+ "risc0-zkvm",
+]
+
+[[package]]
 name = "fuel-derive"
 version = "0.59.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1367,15 +1376,6 @@ dependencies = [
  "hex",
  "serde",
  "sha2",
-]
-
-[[package]]
-name = "fuel-risc0-prover"
-version = "0.1.0"
-dependencies = [
- "alloy-sol-types",
- "fuel-zkvm-primitives-prover",
- "risc0-zkvm",
 ]
 
 [[package]]
@@ -1458,7 +1458,7 @@ dependencies = [
 [[package]]
 name = "fuel-zkvm-primitives-prover"
 version = "0.1.0"
-source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=8f8c7ea#8f8c7eac79818b9879941f1b40ab2ce68677bff4"
+source = "git+https://github.com/FuelLabs/zkvm-primitives?rev=6a43f0f#6a43f0fd2a20e626828f11ec0fc9eaf6f567edc9"
 dependencies = [
  "alloy-sol-types",
  "anyhow",
