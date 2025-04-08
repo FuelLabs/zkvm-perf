@@ -1,3 +1,6 @@
+> [!WARNING]
+> This repo has been archived. See [fuel-sp1](https://github.com/fuellabs/fuel-sp1) and [fuel-risc0](https://github.com/fuellabs/fuel-risc0) for future development.
+
 # ZKVM-Perf And You 🫵🏻
 
 Welcome to ZKVM-Perf, a powerful benchmarking tool for ZKVM implementations. This guide covers both automated workflow-based benchmarking and manual benchmarking processes.
